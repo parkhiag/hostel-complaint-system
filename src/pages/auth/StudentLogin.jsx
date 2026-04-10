@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import { supabase } from "../../services/supabaseClient"
 
 export function BrandPanel() {
@@ -14,7 +15,7 @@ export function BrandPanel() {
           A calmer way to manage <em>hostel life</em>
         </h1>
         <p className="brand-sub">
-          Complaints, requests, updates — everything in one place.
+          Complaints, requests, updates - everything in one place.
         </p>
       </div>
 
@@ -30,7 +31,7 @@ export function BrandPanel() {
 function StudentLogin() {
   const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
-  const [toast, setToast] = useState(null) // { type: 'success' | 'error', message: '' }
+  const [toast, setToast] = useState(null)
   const [otpSent, setOtpSent] = useState(false)
 
   const handleSendLink = async () => {
@@ -43,7 +44,7 @@ function StudentLogin() {
     setToast(null)
 
     const { error } = await supabase.auth.signInWithOtp({
-      email: email
+      email: email,
     })
 
     setLoading(false)
@@ -56,7 +57,6 @@ function StudentLogin() {
     }
   }
 
-  // ✅ Success Screen
   if (otpSent) {
     return (
       <div className="auth-page">
@@ -129,7 +129,6 @@ function StudentLogin() {
             {loading ? "Sending..." : "Send Login Link"}
           </button>
 
-          {/* ✅ Toast */}
           {toast && (
             <div className={`toast ${toast.type}`}>
               {toast.message}
@@ -139,9 +138,9 @@ function StudentLogin() {
           <div className="auth-divider">or</div>
 
           <div className="auth-footer">
-            <a href="/admin-login" className="auth-link">
+            <Link to="/admin-login" className="auth-link">
               Login as Admin
-            </a>
+            </Link>
           </div>
         </div>
       </div>

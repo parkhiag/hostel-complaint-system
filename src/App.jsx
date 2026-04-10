@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { supabase } from "./services/supabaseClient";
 
 import StudentLogin from "./pages/auth/StudentLogin";
+import AdminLogin from "./pages/auth/AdminLogin";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import Complaints from "./pages/student/complaints";
 import CompleteProfile from "./pages/common/CompleteProfile";
@@ -14,6 +15,12 @@ import LatestComplaints from "./admin/pages/LatestComplaints";
 import AllComplaints from "./admin/pages/AllComplaints";
 import Profile from "./admin/pages/Profile";
 
+function ProtectedAdminRoute({ children }) {
+  const isAdminLoggedIn = localStorage.getItem("isAdminLoggedIn") === "true";
+
+  return isAdminLoggedIn ? children : <Navigate to="/admin-login" replace />;
+}
+
 function App() {
   const navigate = useNavigate();
 
@@ -21,7 +28,7 @@ function App() {
     const checkSession = async () => {
       const { data } = await supabase.auth.getSession();
 
-      // Only redirect if user is on root
+      // Only redirect student user if on root
       if (data.session && window.location.pathname === "/") {
         navigate("/dashboard");
       }
@@ -34,6 +41,7 @@ function App() {
     <Routes>
       {/* Auth Routes */}
       <Route path="/" element={<StudentLogin />} />
+      <Route path="/admin-login" element={<AdminLogin />} />
 
       {/* Student Routes */}
       <Route path="/dashboard" element={<StudentDashboard />} />
@@ -43,7 +51,14 @@ function App() {
       <Route path="/complete-profile" element={<CompleteProfile />} />
 
       {/* Admin Routes */}
-      <Route path="/admin" element={<AdminLayout />}>
+      <Route
+        path="/admin"
+        element={
+          <ProtectedAdminRoute>
+            <AdminLayout />
+          </ProtectedAdminRoute>
+        }
+      >
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="latest" element={<LatestComplaints />} />
