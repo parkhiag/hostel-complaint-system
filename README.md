@@ -2,6 +2,9 @@
 
 A web-based platform to streamline complaint management in hostels, replacing inefficient manual systems with a transparent and real-time solution.
 
+## Live Project Link
+https://hostel-complaint-system-three.vercel.app/
+
 ## 🚀 Features
 
 - Complaint submission by students
